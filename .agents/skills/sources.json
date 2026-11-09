@@ -1,0 +1,444 @@
+{
+  "schemaVersion": 1,
+  "scope": "repository",
+  "destination": ".agents/skills",
+  "researchedAt": "2026-11-09",
+  "skills": [
+    {
+      "name": "gsap-core",
+      "repository": "greensock/gsap-skills",
+      "path": "skills/gsap-core",
+      "license": "MIT",
+      "commit": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "url": "https://github.com/greensock/gsap-skills/tree/aed9cfd3277740755f6bfc1155c7aa645403b760/skills/gsap-core",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "98639432f4112b664aa5e53cf5d8ea1a4697eff9"
+        }
+      ]
+    },
+    {
+      "name": "gsap-timeline",
+      "repository": "greensock/gsap-skills",
+      "path": "skills/gsap-timeline",
+      "license": "MIT",
+      "commit": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "url": "https://github.com/greensock/gsap-skills/tree/aed9cfd3277740755f6bfc1155c7aa645403b760/skills/gsap-timeline",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "1fed372b0e5276b2a207d80bc23f81180a0dff55"
+        }
+      ]
+    },
+    {
+      "name": "gsap-react",
+      "repository": "greensock/gsap-skills",
+      "path": "skills/gsap-react",
+      "license": "MIT",
+      "commit": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "url": "https://github.com/greensock/gsap-skills/tree/aed9cfd3277740755f6bfc1155c7aa645403b760/skills/gsap-react",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "e2e51805457943cd4982fe792b858c14fa2c3c8f"
+        }
+      ]
+    },
+    {
+      "name": "gsap-performance",
+      "repository": "greensock/gsap-skills",
+      "path": "skills/gsap-performance",
+      "license": "MIT",
+      "commit": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "url": "https://github.com/greensock/gsap-skills/tree/aed9cfd3277740755f6bfc1155c7aa645403b760/skills/gsap-performance",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "05792acf5b0ea7fd30042cdc5e91282e8e047898"
+        }
+      ]
+    },
+    {
+      "name": "gsap-utils",
+      "repository": "greensock/gsap-skills",
+      "path": "skills/gsap-utils",
+      "license": "MIT",
+      "commit": "aed9cfd3277740755f6bfc1155c7aa645403b760",
+      "url": "https://github.com/greensock/gsap-skills/tree/aed9cfd3277740755f6bfc1155c7aa645403b760/skills/gsap-utils",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "367e405e027936ce6b5fb85ec996beb135715194"
+        }
+      ]
+    },
+    {
+      "name": "frontend-design",
+      "repository": "anthropics/skills",
+      "path": "skills/frontend-design",
+      "license": "Apache-2.0",
+      "commit": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "url": "https://github.com/anthropics/skills/tree/2c5958ecac7cee2b583967a2c4981d0f4a75c579/skills/frontend-design",
+      "files": [
+        {
+          "path": "LICENSE.txt",
+          "gitBlobSha": "f433b1a53f5b830a205fd2df78e2b34974656c7b"
+        },
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "a5333457c414d20d625f307df945842c0952ecc3"
+        }
+      ]
+    },
+    {
+      "name": "webapp-testing",
+      "repository": "anthropics/skills",
+      "path": "skills/webapp-testing",
+      "license": "Apache-2.0",
+      "commit": "2c5958ecac7cee2b583967a2c4981d0f4a75c579",
+      "url": "https://github.com/anthropics/skills/tree/2c5958ecac7cee2b583967a2c4981d0f4a75c579/skills/webapp-testing",
+      "files": [
+        {
+          "path": "LICENSE.txt",
+          "gitBlobSha": "4f881c52d1f72f4cfb720e339e2d35c3058d01a9"
+        },
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "4726215301db64a0cc4d41fc3219c61f37a30f4a"
+        },
+        {
+          "path": "examples/console_logging.py",
+          "gitBlobSha": "9329b5e232ed53d944bfe95e750070117d31b9ab"
+        },
+        {
+          "path": "examples/element_discovery.py",
+          "gitBlobSha": "917ba72f52421a1b324f93ae8e38af72010a87b9"
+        },
+        {
+          "path": "examples/static_html_automation.py",
+          "gitBlobSha": "90bbedcc08cdb345c74fb938ebad02c0baf56603"
+        },
+        {
+          "path": "scripts/with_server.py",
+          "gitBlobSha": "431f2eba16b268b7f3e2ae4daae9db41c0289b6d"
+        }
+      ]
+    },
+    {
+      "name": "vercel-react-best-practices",
+      "repository": "vercel-labs/agent-skills",
+      "path": "skills/react-best-practices",
+      "license": "MIT (declarada no frontmatter upstream)",
+      "commit": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "url": "https://github.com/vercel-labs/agent-skills/tree/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices",
+      "files": [
+        {
+          "path": "AGENTS.md",
+          "gitBlobSha": "4e340a50684a8e7811d5bfa4df48bd9989d0fd87"
+        },
+        {
+          "path": "README.md",
+          "gitBlobSha": "f283e1c0c21c5b13c848452528c3949ff544846c"
+        },
+        {
+          "path": "SKILL.md",
+          "gitBlobSha": "237988de4a66dd8a71d30a2c24ebe1a86b58d04e"
+        },
+        {
+          "path": "metadata.json",
+          "gitBlobSha": "3bec38b176cc71d105895ec4678bbe79305dcb4c"
+        },
+        {
+          "path": "rules/_sections.md",
+          "gitBlobSha": "4d20c144bc3b9265fc5976c704a8dd60ed3a806a"
+        },
+        {
+          "path": "rules/_template.md",
+          "gitBlobSha": "1e9e70703485021e0b969f5731f38c8b9f8694db"
+        },
+        {
+          "path": "rules/advanced-effect-event-deps.md",
+          "gitBlobSha": "24d901b62be66f6088eb1de5b262e67f5c337d57"
+        },
+        {
+          "path": "rules/advanced-event-handler-refs.md",
+          "gitBlobSha": "97e7ade243aa6dae50d6faa5111dea0d04778ead"
+        },
+        {
+          "path": "rules/advanced-init-once.md",
+          "gitBlobSha": "73ee38e5e74c0afa28cb730afe3275479432092a"
+        },
+        {
+          "path": "rules/advanced-use-latest.md",
+          "gitBlobSha": "9c7cb501693d4a9521697f13dbd5906dd99f0257"
+        },
+        {
+          "path": "rules/async-api-routes.md",
+          "gitBlobSha": "6feda1ef0ac06b57b33c7b5bd6a19ca88d6c8a34"
+        },
+        {
+          "path": "rules/async-cheap-condition-before-await.md",
+          "gitBlobSha": "5799d7f6ee6e9d70422048ab0cae06ca021d22b2"
+        },
+        {
+          "path": "rules/async-defer-await.md",
+          "gitBlobSha": "460b5e16baf9c66f85e4169eb9d43e4d07f2ce94"
+        },
+        {
+          "path": "rules/async-dependencies.md",
+          "gitBlobSha": "0484ebab993f3db78277e8731872473d02475e6d"
+        },
+        {
+          "path": "rules/async-parallel.md",
+          "gitBlobSha": "64133f6c31fec81eaaabd712586337d20122e09f"
+        },
+        {
+          "path": "rules/async-suspense-boundaries.md",
+          "gitBlobSha": "1fbc05b04ed2474637b12014a77688750e78f931"
+        },
+        {
+          "path": "rules/bundle-analyzable-paths.md",
+          "gitBlobSha": "8276f156cf1aa8a611bd5bc3cadcb362e16ccd13"
+        },
+        {
+          "path": "rules/bundle-barrel-imports.md",
+          "gitBlobSha": "22d1050196671b7bc9f9aaf88cc665ba6fa8deb0"
+        },
+        {
+          "path": "rules/bundle-conditional.md",
+          "gitBlobSha": "99d6fc90e31d683d2b6b71353b92d620b484b644"
+        },
+        {
+          "path": "rules/bundle-defer-third-party.md",
+          "gitBlobSha": "db041d1510e51defeade05926ba4e6bbad1068b5"
+        },
+        {
+          "path": "rules/bundle-dynamic-imports.md",
+          "gitBlobSha": "60b62695e7a080e2020ff2242d8d841c5e3ecbc4"
+        },
+        {
+          "path": "rules/bundle-preload.md",
+          "gitBlobSha": "7000504065472628ae614786a3faadd23b0435a7"
+        },
+        {
+          "path": "rules/client-event-listeners.md",
+          "gitBlobSha": "aad4ae91605d715aad8e92b76bd7fb85c91d7cdf"
+        },
+        {
+          "path": "rules/client-localstorage-schema.md",
+          "gitBlobSha": "d30a1a7d4f85b0d50a0808eaa1b382c6deb595f4"
+        },
+        {
+          "path": "rules/client-passive-event-listeners.md",
+          "gitBlobSha": "ce39a889efb4452ec4c044555ff818301dcf7ece"
+        },
+        {
+          "path": "rules/client-swr-dedup.md",
+          "gitBlobSha": "2a430f27fd6abdc1b1b2f809b7a60114ff506790"
+        },
+        {
+          "path": "rules/js-batch-dom-css.md",
+          "gitBlobSha": "a62d84ed8149b6d4f173debc7043af03f8f8dd06"
+        },
+        {
+          "path": "rules/js-cache-function-results.md",
+          "gitBlobSha": "180f8ac8fffd7e6ee320242d59d06565d40a12f8"
+        },
+        {
+          "path": "rules/js-cache-property-access.md",
+          "gitBlobSha": "39eec9061b4ca820150cc8183fb73f9e0c91ce85"
+        },
+        {
+          "path": "rules/js-cache-storage.md",
+          "gitBlobSha": "aa4a30c08176aabd27b41fa44d5c1981457b675f"
+        },
+        {
+          "path": "rules/js-combine-iterations.md",
+          "gitBlobSha": "044d017ec3b24b53e46d638acd1d936a22ac6323"
+        },
+        {
+          "path": "rules/js-early-exit.md",
+          "gitBlobSha": "f46cb89c6cbe06e481aba0136848e3b17263ba96"
+        },
+        {
+          "path": "rules/js-flatmap-filter.md",
+          "gitBlobSha": "ee0edf0da256eb8b62c5a998c768c51eb520e8cd"
+        },
+        {
+          "path": "rules/js-hoist-regexp.md",
+          "gitBlobSha": "dae3fefdc0a1db66badcd4875489715edcdb038b"
+        },
+        {
+          "path": "rules/js-index-maps.md",
+          "gitBlobSha": "9d357a00b15ac67cdd638886f5197a13173a637d"
+        },
+        {
+          "path": "rules/js-length-check-first.md",
+          "gitBlobSha": "8b89573630fdc3aa10564273f390ecc7e2b1cd3e"
+        },
+        {
+          "path": "rules/js-min-max-loop.md",
+          "gitBlobSha": "4b6656e96aecf3ae6ade52974090ae8b3e3f2bb5"
+        },
+        {
+          "path": "rules/js-request-idle-callback.md",
+          "gitBlobSha": "d81927e5f0ddb9fa4eece79197728bfc4382cbfe"
+        },
+        {
+          "path": "rules/js-set-map-lookups.md",
+          "gitBlobSha": "680a4892ee291c432bf8e769a44d0f1eb102b74b"
+        },
+        {
+          "path": "rules/js-tosorted-immutable.md",
+          "gitBlobSha": "eae8b3f8aed2c7a893ceaae4cab55fa1c444b309"
+        },
+        {
+          "path": "rules/rendering-activity.md",
+          "gitBlobSha": "c957a490b7c2688542766150741e85e066539251"
+        },
+        {
+          "path": "rules/rendering-animate-svg-wrapper.md",
+          "gitBlobSha": "646744cbe53b213c6fa5ead54ef107510e5be89d"
+        },
+        {
+          "path": "rules/rendering-conditional-render.md",
+          "gitBlobSha": "7e866f5852dac80e0822e7f7c33476f5c9fc22f1"
+        },
+        {
+          "path": "rules/rendering-content-visibility.md",
+          "gitBlobSha": "aa6656362b2c0dad9ffea788b5850843d6c0629e"
+        },
+        {
+          "path": "rules/rendering-hoist-jsx.md",
+          "gitBlobSha": "32d2f3fcea53dadcf847231ee20c60fa2c5c3049"
+        },
+        {
+          "path": "rules/rendering-hydration-no-flicker.md",
+          "gitBlobSha": "5cf0e79b69afd7564b965c09435a2c7ee79eb2bd"
+        },
+        {
+          "path": "rules/rendering-hydration-suppress-warning.md",
+          "gitBlobSha": "24ba2513a29f5259b3184695d2d4da25e03e42ac"
+        },
+        {
+          "path": "rules/rendering-resource-hints.md",
+          "gitBlobSha": "1290bef06baf459f85dc5856ffc4486951224a48"
+        },
+        {
+          "path": "rules/rendering-script-defer-async.md",
+          "gitBlobSha": "ee275ed1c06da8f1ae70e744e47965799eaebf02"
+        },
+        {
+          "path": "rules/rendering-svg-precision.md",
+          "gitBlobSha": "6d7712860365294936a1b736d29d3eb970b91da7"
+        },
+        {
+          "path": "rules/rendering-usetransition-loading.md",
+          "gitBlobSha": "0c1b0b98e884d2c77bdec66df754693bd48c7777"
+        },
+        {
+          "path": "rules/rerender-defer-reads.md",
+          "gitBlobSha": "e867c95f02fe6ed6ac2f91fdf1c0922304e0423a"
+        },
+        {
+          "path": "rules/rerender-dependencies.md",
+          "gitBlobSha": "47a4d92685702e3a3b07073c62a61800fa0a6d7d"
+        },
+        {
+          "path": "rules/rerender-derived-state-no-effect.md",
+          "gitBlobSha": "3d9fe4050794ea6655add6bee50cfbc104e5dc31"
+        },
+        {
+          "path": "rules/rerender-derived-state.md",
+          "gitBlobSha": "e5c899f6c073338bbd1b73c0275bc3e5e7d9ae7b"
+        },
+        {
+          "path": "rules/rerender-functional-setstate.md",
+          "gitBlobSha": "b004ef45e347503947fee397b6c3d163b0a317fb"
+        },
+        {
+          "path": "rules/rerender-lazy-state-init.md",
+          "gitBlobSha": "4ecb350fbadff3db805b72429276e672d42736dc"
+        },
+        {
+          "path": "rules/rerender-memo-with-default-value.md",
+          "gitBlobSha": "63570491848cb42c2bc7073bceb754893a6a4cfa"
+        },
+        {
+          "path": "rules/rerender-memo.md",
+          "gitBlobSha": "f8982ab612105a3b7faee1292b797338e7fb5271"
+        },
+        {
+          "path": "rules/rerender-move-effect-to-event.md",
+          "gitBlobSha": "dd58a1af091b3cf5cb271d25904af4feb836d1aa"
+        },
+        {
+          "path": "rules/rerender-no-inline-components.md",
+          "gitBlobSha": "d97592acefced05bc4a8538c77d226fa24c08534"
+        },
+        {
+          "path": "rules/rerender-simple-expression-in-memo.md",
+          "gitBlobSha": "59dfab0f3b048097627e0ca6e4c8da36629a5268"
+        },
+        {
+          "path": "rules/rerender-split-combined-hooks.md",
+          "gitBlobSha": "89d805644dbffe3877bc1356bdf8ad416a5c715b"
+        },
+        {
+          "path": "rules/rerender-transitions.md",
+          "gitBlobSha": "d99f43f764232e994a49a1df89ec9d624552f439"
+        },
+        {
+          "path": "rules/rerender-use-deferred-value.md",
+          "gitBlobSha": "619c04b0142bf5a5b7d0f69532a56b797a78f664"
+        },
+        {
+          "path": "rules/rerender-use-ref-transient-values.md",
+          "gitBlobSha": "cf04b81f8a531eacd07a32e8917fb3ed3c1bbecb"
+        },
+        {
+          "path": "rules/server-after-nonblocking.md",
+          "gitBlobSha": "e8f5b260f5fc6d58141bc61e0a091569adb81e7e"
+        },
+        {
+          "path": "rules/server-auth-actions.md",
+          "gitBlobSha": "ee82c0442bc69ffae7bf20c07709d57893da1123"
+        },
+        {
+          "path": "rules/server-cache-lru.md",
+          "gitBlobSha": "ef6938aa53c55dc3c0035bd6c66838810d870260"
+        },
+        {
+          "path": "rules/server-cache-react.md",
+          "gitBlobSha": "87c9ca33168a321a59fbaaa84843e2f48c99751a"
+        },
+        {
+          "path": "rules/server-dedup-props.md",
+          "gitBlobSha": "fb24a2562c73fadbb9a11a79897c2cf93ea3c69a"
+        },
+        {
+          "path": "rules/server-hoist-static-io.md",
+          "gitBlobSha": "25205c2fc42d0dd684d6423acde642774329a8cc"
+        },
+        {
+          "path": "rules/server-no-shared-module-state.md",
+          "gitBlobSha": "ff7d9f29c6e0e42ec1471acec8a3c7f394c8358d"
+        },
+        {
+          "path": "rules/server-parallel-fetching.md",
+          "gitBlobSha": "1affc835a601a894fd02de08e6c9cdfd76d34b64"
+        },
+        {
+          "path": "rules/server-parallel-nested-fetching.md",
+          "gitBlobSha": "be1dc25075e40e6bda46cb24dc5a6f42b916b0e8"
+        },
+        {
+          "path": "rules/server-serialization.md",
+          "gitBlobSha": "39c5c4164c31be7f171ea2f4b3b32fe47709a651"
+        }
+      ]
+    }
+  ]
+}
