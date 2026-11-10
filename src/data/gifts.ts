@@ -1,10 +1,12 @@
 import type { GlyphCard } from "@react-cards-opening/ui";
 import { DEFAULT_RARITIES } from "@react-cards-opening/core";
+import { CARD_PALETTE } from "./cardPalette";
 
 export interface GiftDefinition extends GlyphCard {
   line: string;
   icon?: "bag" | "pudding" | "gift";
-  visual?: { src: string; alt: string; fit?: "contain" | "cover" };
+  visual?: { src: string; alt: string; fit?: "contain" | "cover"; kind?: "image" | "logo" };
+  brand?: { src: string; alt: string };
   appearance?: {
     primaryColor?: string;
     secondaryColors?: readonly string[];
@@ -28,9 +30,10 @@ export const giftCards: GiftDefinition[] = [
     id: "carrinho-shein",
     name: "Vale Carrinho SHEIN",
     line: "Um vale para escolher R$ 100 em produtos na SHEIN.",
-    rarity: "epic",
+    rarity: "rare",
     icon: "bag",
-    appearance: { primaryColor: "#c5a5ff", style: "foil" },
+    visual: { src: `${import.meta.env.BASE_URL}shein.jpg`, alt: "Logo da SHEIN", fit: "contain", kind: "logo" },
+    appearance: { primaryColor: CARD_PALETTE.pink, secondaryColors: [CARD_PALETTE.blush], style: "foil" },
     revealEffect: "celebration",
     info: { amountInCents: 10000, currency: "BRL", note: "Escolha seus favoritos, com carinho." },
   },
@@ -38,9 +41,11 @@ export const giftCards: GiftDefinition[] = [
     id: "pudim-rebeca",
     name: "Vale Caixa de Pudim da Rebeca",
     line: "Um vale-presente para ganhar uma caixa de pudim da Rebeca.",
-    rarity: "rare",
+    rarity: "epic",
     icon: "pudding",
-    appearance: { primaryColor: "#f0bf86", style: "classic" },
+    visual: { src: `${import.meta.env.BASE_URL}pudim_pack.webp`, alt: "Pudim da Rebeca", fit: "contain" },
+    brand: { src: `${import.meta.env.BASE_URL}doceriadarebeka.jpg`, alt: "Logo da Doceria da Rebeka" },
+    appearance: { primaryColor: CARD_PALETTE.blush, secondaryColors: [CARD_PALETTE.pink], style: "foil" },
     revealEffect: "glow",
     info: { note: "Uma surpresa doce para o seu dia." },
   },

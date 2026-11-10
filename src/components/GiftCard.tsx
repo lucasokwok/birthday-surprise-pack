@@ -1,8 +1,18 @@
 import { useState, type CSSProperties, type Ref } from "react";
 import { Card, PixelGlyph, themeOf } from "@react-cards-opening/ui";
 import { giftRarities, rarityLabel, type GiftDefinition } from "../data/gifts";
+import { CARD_CSS_RADIUS, CARD_LAYOUT } from "../data/cardLayout";
+import { CARD_COLOR_VARIABLES, CARD_PALETTE } from "../data/cardPalette";
+import { CARD_BACK_IMAGE } from "../data/cardBack";
 
-const cardTheme = themeOf("mono", "dark");
+const cardTheme = {
+  ...themeOf("mono", "dark"),
+  bg: CARD_PALETTE.base,
+  card: CARD_PALETTE.base,
+  fg: CARD_PALETTE.text,
+  muted: CARD_PALETTE.muted,
+  levels: [CARD_PALETTE.base, CARD_PALETTE.raised, CARD_PALETTE.muted, CARD_PALETTE.blush, CARD_PALETTE.pink] as const,
+};
 const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 function GiftIcon({ kind }: { kind?: GiftDefinition["icon"] }) {
@@ -26,21 +36,30 @@ function GiftIcon({ kind }: { kind?: GiftDefinition["icon"] }) {
 
 export function GiftCardFace({ gift }: { gift: GiftDefinition }) {
   const [imageFailed, setImageFailed] = useState(false);
-  const tone = gift.appearance?.primaryColor ?? "#c5a5ff";
+  const [brandFailed, setBrandFailed] = useState(false);
+  const tone = gift.appearance?.primaryColor ?? CARD_PALETTE.pink;
+  const hasVisual = !!gift.visual && !imageFailed;
+  const hasBrand = !!gift.brand && !brandFailed;
   return (
-    <div className="gift-face">
+    <div className="gift-face" data-visual={hasVisual || undefined}>
       <span className="gift-rarity">{rarityLabel(gift.rarity)}</span>
-      <div className="gift-art">
-        {gift.visual && !imageFailed ? (
-          <img src={gift.visual.src} alt={gift.visual.alt} draggable={false}
+      <div className="gift-art" data-kind={hasVisual ? gift.visual?.kind ?? "image" : undefined}
+        data-brand={hasBrand || undefined}>
+        {gift.visual && hasVisual ? (
+          <img className="gift-visual" src={gift.visual.src} alt={gift.visual.alt} draggable={false} decoding="async"
             style={{ objectFit: gift.visual.fit ?? "contain" }} onError={() => setImageFailed(true)} />
         ) : gift.art ? <PixelGlyph art={gift.art} colour={tone} /> : <GiftIcon kind={gift.icon} />}
+        {gift.brand && hasBrand ? (
+          <span className="gift-brand">
+            <img src={gift.brand.src} alt={gift.brand.alt} draggable={false} decoding="async"
+              onError={() => setBrandFailed(true)} />
+          </span>
+        ) : null}
       </div>
       <h3>{gift.name}</h3>
       {gift.info?.amountInCents !== undefined ? (
         <strong className="gift-value">{money.format(gift.info.amountInCents / 100)}</strong>
       ) : null}
-      <p>{gift.line}</p>
     </div>
   );
 }
@@ -48,20 +67,25 @@ export function GiftCardFace({ gift }: { gift: GiftDefinition }) {
 export function GiftCard({ gift, faceDown = false, flipRef }: {
   gift: GiftDefinition; faceDown?: boolean; flipRef?: Ref<HTMLDivElement>;
 }) {
-  const tone = gift.appearance?.primaryColor ?? "#c5a5ff";
+  const tone = gift.appearance?.primaryColor ?? CARD_PALETTE.pink;
   return (
     <div className="gift-card" data-down={faceDown || undefined}
       data-style={gift.appearance?.style ?? "classic"}
-      style={{ "--gift-tone": tone, "--gift-secondary": gift.appearance?.secondaryColors?.[0] ?? tone } as CSSProperties}>
+      style={{ ...CARD_COLOR_VARIABLES, "--gift-tone": tone, "--gift-secondary": gift.appearance?.secondaryColors?.[0] ?? tone,
+        "--gift-radius": CARD_CSS_RADIUS, aspectRatio: `1 / ${CARD_LAYOUT.ratio}` } as CSSProperties}>
       <div className="gift-flip" ref={flipRef}>
         <div className="gift-front">
-          <Card card={gift} rarities={giftRarities} theme={cardTheme} tone={tone} width="100%" ratio={1.45}>
+          <Card card={gift} rarities={giftRarities} theme={cardTheme} tone={tone} width="100%" ratio={CARD_LAYOUT.ratio}
+            classNames={{ back: "gift-frame-back" }} style={{ perspective: "none",
+              "--rco-radius": `calc(100cqw * ${CARD_LAYOUT.cornerRatio})` } as CSSProperties}>
             <GiftCardFace gift={gift} />
           </Card>
           <i className="gift-shine" aria-hidden="true" />
         </div>
         <div className="gift-back" aria-hidden="true">
-          <div className="gift-back-border"><span>✦</span><small>Uma surpresa<br />só sua</small></div>
+          <div className="gift-back-border">
+            <img className="gift-back-image" src={CARD_BACK_IMAGE} alt="" draggable={false} decoding="async" />
+          </div>
         </div>
       </div>
     </div>
