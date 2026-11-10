@@ -14,6 +14,7 @@ import { packConfig } from "../data/pack";
 import { CARD_PALETTE } from "../data/cardPalette";
 import { CARD_BACK_IMAGE } from "../data/cardBack";
 import { PackOpeningLight } from "./PackOpeningLight";
+import { PackGroundLight } from "./PackGroundLight";
 
 const labelUrl = `${import.meta.env.BASE_URL}${packConfig.labelTexture}`;
 
@@ -168,7 +169,7 @@ function SceneModel({ motion, count, reducedMotion, onReady, connect }: BoosterS
     if (packRoot.current) {
       const pose = packPose(value);
       packRoot.current.rotation.set(pose.rotationX, pose.rotationY, pose.rotationZ);
-      packRoot.current.position.y = pose.y;
+      packRoot.current.position.set(pose.x, pose.y, 0);
       packRoot.current.scale.setScalar(pose.scale);
     }
     if (body.current) {
@@ -212,6 +213,7 @@ function SceneModel({ motion, count, reducedMotion, onReady, connect }: BoosterS
         </group>
       </group>
     </group>
+    <PackGroundLight motion={motion} width={model.width} height={model.height} reducedMotion={reducedMotion} />
     <PackOpeningLight motion={motion} width={model.width} cutY={model.cutY}
       count={count} pixelsPerUnit={pixelsPerUnit} reducedMotion={reducedMotion} />
     {Array.from({ length: count }, (_, index) => <group key={index} ref={(element) => { cards.current[index] = element; }} visible={false}>

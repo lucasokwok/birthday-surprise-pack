@@ -72,6 +72,7 @@ export function PackOpeningLight({ motion, width, cutY, count, pixelsPerUnit, re
       source.current.position.set((span - width) / 2, cutY + 0.005, 0.02)
         .applyEuler(orientation).multiplyScalar(pack.scale);
       source.current.position.y += pack.y;
+      source.current.position.x += pack.x;
       source.current.rotation.copy(orientation);
       source.current.scale.setScalar(pack.scale);
     }

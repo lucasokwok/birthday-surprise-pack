@@ -50,8 +50,9 @@ Corpo e superfície do verso usam um contorno arredondado real, extrudado com es
 ## Interface e qualidade
 
 - Fundo preto e viewport inteira; sem cabeçalho, título, contador, instruções, rodapé ou HUD visível. O botão com ícone de reinício no canto superior direito é a exceção solicitada posteriormente pelo usuário.
-- Rótulo inicialmente alinhado à câmera, sem rotação fixa lateral. Mouse à esquerda gira o pacote para a direita, e vice-versa, com suavização de 0,6 segundo e amplitude horizontal limitada.
-- Respiração em ciclo suave de 4,8 segundos, combinando escala de até 0,8% e leve deslocamento vertical. Pausa ao iniciar o rasgo/abertura e retorna ao repouso; retoma se o gesto for cancelado. Fica desativada com movimento reduzido e pausada quando a aba está oculta.
+- Rótulo inicialmente alinhado à câmera, sem rotação fixa lateral. Mouse ou toque no corpo inclinam o pacote, com suavização de 0,25 segundo e limites de 8°/16°. A posição é normalizada pela região do pacote; ao soltar o toque, retorna ao centro. A faixa superior continua exclusiva para rasgar, e a área corporal permite rolagem vertical e zoom.
+- Respiração em ciclo suave de 4,8 segundos, combinando escala de até 0,8% e leve deslocamento vertical. Tremidas de 0,4 segundo a cada 2 segundos combinam deslocamento e rotação com impulsos decrescentes e direção alternada. Ambos pausam durante toque corporal, rasgo/abertura, aba oculta e movimento reduzido; retomam após soltar ou cancelar o rasgo.
+- `PackGroundLight.tsx` desenha uma elipse luminosa abaixo do pacote, com núcleo branco rosado e queda radial suave. A intensidade acompanha discretamente a respiração e desaparece com o descarte. Com movimento reduzido, a luz fica estática. É uma emissão aditiva sem chão visível ou shadow map; o material é liberado na desmontagem.
 - Arraste na parte superior para abrir; clique/toque na carta para revelar e continuar.
 - Controles de teclado e anúncios permanecem acessíveis, visualmente ocultos. O foco por teclado pode tornar a ação acessível visível.
 - Na coleção, toque em uma carta para inspecionar; feche pelo botão ×, Escape ou fundo do diálogo. Use o ícone de reinício para voltar ao booster fechado; clicar no fundo da coleção preserva a sessão. A tecla R também reinicia enquanto o foco está na aplicação, fora do diálogo.
@@ -63,7 +64,7 @@ Corpo e superfície do verso usam um contorno arredondado real, extrudado com es
 
 ## Regras dos presentes preservadas
 
-O aplicativo atual não tem probabilidades, inventário persistente ou chamadas de abertura a uma API. Os dois presentes configurados são garantidos, na ordem do array, e o progresso é em memória. A integração 3D preserva isso. Não foi criado sorteio nem persistência nova.
+O aplicativo atual não tem probabilidades, inventário persistente ou chamadas de abertura a uma API. Os quatro presentes configurados são garantidos, na ordem do array, e o progresso é em memória. A integração 3D preserva isso. Não foi criado sorteio nem persistência nova.
 
 ## Validação e limites
 

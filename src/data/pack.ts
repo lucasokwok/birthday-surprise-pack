@@ -9,4 +9,5 @@ export const packConfig = {
   color: CARD_PALETTE.pink,
   labelTexture: "textures/pack-label.png",
   tearThreshold: 0.75,
+  idle: { shakeInterval: 2, shakeDuration: 0.4, tiltDuration: 0.25 },
 };

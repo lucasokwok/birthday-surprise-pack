@@ -14,7 +14,7 @@ Este roadmap registra objetivos e estado da implementação de 09/11/2026. Os re
 | 4A: dados | SHEIN (rara), Pudim (épica), Café da Tarde e Chocolate com Laranja (lendárias), contrato configurável |
 | 4B: design das cartas | Artes completas de `public/cards/` aplicadas, fallback de ícones e foil; avaliação visual pelo usuário |
 | 5A: coleção | Implementada com inspeção e reinício |
-| 6A/6B: polimento | Base simples; refinamento gráfico adiado conforme pedido |
+| 6A/6B: polimento | Flutuação, tremida periódica, inclinação por mouse/toque e luz inferior implementadas; avaliação visual pelo usuário |
 | 7A: build | Executar `npm run build`; demais validações dispensadas |
 | 7B: documentação | Atualizada para a composição implementada |
 

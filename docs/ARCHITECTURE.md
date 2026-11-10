@@ -30,8 +30,9 @@ React 19/React DOM, TypeScript, Vite, GSAP e `@react-cards-opening/core`/`ui` pe
 | --- | --- |
 | `src/main.tsx` | Entrada em `StrictMode`; CSS da biblioteca antes dos estilos locais |
 | `src/App.tsx` | Estado de conclusão, chave da sessão, apresentação e reinício |
-| `src/components/PackExperience.tsx` | Gesto, fases, índice ativo, IDs revelados e timelines |
+| `src/components/PackExperience.tsx` | Gesto, fases, revelação, inclinação por mouse/toque e timelines de flutuação/tremida |
 | `src/components/BoosterScene.tsx` | GLB, cache, materiais e renderização 3D |
+| `src/components/PackGroundLight.tsx` | Elipse de luz aditiva abaixo do pacote, com intensidade/posição derivadas do movimento e fade no descarte |
 | `src/components/PackOpeningLight.tsx` | Brilho forte na costura do rasgo e luz residual atrás do baralho após a abertura, com movimento reduzido |
 | `src/three/boosterGeometry.ts` | Normalização e recorte de triângulos |
 | `src/three/boosterMotion.ts` | Poses numéricas compartilhadas com testes |
@@ -90,7 +91,11 @@ A revelação usa duas metades de giro: costas até 90 graus, registro do ID e e
 
 A escolha de `revealEffect` resolve efeitos públicos da biblioteca: celebração com confete/estrela, brilho com glitter/halo e padrão discreto. A cor principal é passada ao efeito. A camada é limpa no avanço e no reinício.
 
-Movimento reduzido encurta as transições, não executa partículas e desativa loops CSS. Se a preferência mudar durante uma transição, a timeline ativa chega ao fim. A inclinação por mouse utiliza `quickTo` em wrapper separado e só é acionada durante leitura; toque não depende de hover.
+Movimento reduzido encurta as transições, não executa partículas e desativa loops CSS. Se a preferência mudar durante uma transição, a timeline ativa chega ao fim. A inclinação das cartas por mouse utiliza `quickTo` em wrapper separado e só é acionada durante leitura; toque não depende de hover. O pacote fechado tem sua própria inclinação, por mouse ou toque no corpo, normalizada pela região do pacote e limitada a 8°/16°, com suavização de 0,25 segundo. A área corporal permite rolagem vertical/zoom e não substitui a faixa superior de rasgo; captura de toque é liberada ao soltar, cancelar, perder captura, redimensionar, ocultar a aba ou reiniciar.
+
+O repouso usa duas timelines GSAP reutilizadas: flutuação em ciclo de 4,8 segundos e tremidas de 0,4 segundo iniciadas a cada 2 segundos, alternando direção. `packConfig.idle` configura os tempos. `breath`, `shake` e `hoverX`/`hoverY` ocupam canais separados em `BoosterMotion`, compostos apenas em `packPose()`. Os ciclos param durante toque corporal, rasgo/abertura, aba oculta e movimento reduzido. Ao soltar ou cancelar o rasgo, a espera para a próxima tremida recomeça. Todos os tweens são registrados no contexto da sessão.
+
+A luz inferior usa um plano com shader radial e mistura aditiva, núcleo branco rosado e bordas transparentes. Fica ancorada abaixo do pacote, varia discretamente com flutuação/inclinação e apaga com `drop`; com movimento reduzido, permanece estática. Não há chão visível, shadow map, pós-processamento ou nova dependência. `packGroundLight()` deriva os valores do mesmo estado de movimento.
 
 ## 7. Dados e personalização
 

@@ -11,6 +11,7 @@
 .deck-tilt { position: absolute; inset: 0; transform-style: preserve-3d; }
 .card-slot { position: absolute; inset: 0; opacity: 0; visibility: hidden; transform-style: preserve-3d; }
 .card-hit { position: absolute; inset: 0; z-index: 30; background: transparent; border: 0; border-radius: 22px; cursor: pointer; }
+.pack-touch-target { position: absolute; z-index: 4; left: 50%; top: calc(50% + var(--card-width) * 0.1); translate: -50% -50%; width: calc(var(--card-width) * 1.37); height: calc(var(--card-width) * 1.8); touch-action: pan-y pinch-zoom; user-select: none; -webkit-tap-highlight-color: transparent; }
 .tear-target { position: absolute; z-index: 5; left: 50%; top: calc(50% - var(--card-width) * 0.92); translate: -50% -50%; width: calc(var(--card-width) * 1.37); height: calc(var(--card-width) * 0.4); background: transparent; border: 0; cursor: ew-resize; touch-action: pan-y pinch-zoom; user-select: none; -webkit-tap-highlight-color: transparent; }
 .tear-target:disabled { pointer-events: none; }
 .scene-effects { z-index: 8; pointer-events: none; }

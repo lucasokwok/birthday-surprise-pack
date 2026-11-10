@@ -7,6 +7,9 @@ Não há backend, banco, login, pagamentos, cupons válidos, resgate ou integra�
 ## Implementado
 
 - Rasgo horizontal controlado por Pointer Events, com progresso proporcional ao arraste.
+- Pacote fechado com flutuação suave e tremidas de 0,4 segundo a cada 2 segundos, alternando direção.
+- Inclinação pelo mouse e pelo toque no corpo, com limites de 8°/16° e retorno ao soltar; faixa superior reservada ao rasgo.
+- Elipse luminosa branca/rosa abaixo do pacote, com bordas suaves e desaparecimento no descarte.
 - Retorno da faixa se a pessoa soltar antes de 75%; confirmação única após o limiar.
 - Tratamento de cancelamento, perda de captura, resize e perda de foco da janela.
 - Abertura alternativa por botão/teclado.
@@ -70,7 +73,7 @@ Para imagem ou ícone próprio, usar `visual: { src: "/meu-presente.webp", alt: 
 
 `info.amountInCents` é opcional; `10000` exibe R$ 100,00. Sem valor configurado não aparece preço. A ordem do array é a ordem de revelação. Todos os presentes são garantidos; raridade afeta somente a apresentação. Uma lista vazia exibe uma mensagem estática.
 
-Editar [src/data/pack.ts](src/data/pack.ts) para cor dos efeitos e limiar do gesto. Os campos antigos de mensagem/emblema não geram HUD; a aparência da embalagem vem do GLB. Arraste a parte superior para abrir e toque/clique nas cartas para revelar/continuar ou inspecionar na coleção. O botão com ícone no canto superior direito restaura o booster fechado; clicar no fundo da coleção não reinicia mais a sessão. Também há controles acessíveis por teclado; R reinicia enquanto o foco está na aplicação, fora do diálogo.
+Editar [src/data/pack.ts](src/data/pack.ts) para cor dos efeitos e limiar do gesto. `packConfig.idle` define intervalo/duração das tremidas e suavização da inclinação. As tremidas e a flutuação pausam durante toque, rasgo/abertura e com a aba oculta; retomam após soltar ou cancelar o rasgo. Movimento reduzido desativa esses movimentos e mantém a luz inferior estática até o descarte. Os campos antigos de mensagem/emblema não geram HUD; a aparência da embalagem vem do GLB. Arraste a parte superior para abrir e toque/clique nas cartas para revelar/continuar ou inspecionar na coleção. O botão com ícone no canto superior direito restaura o booster fechado; clicar no fundo da coleção não reinicia mais a sessão. Também há controles acessíveis por teclado; R reinicia enquanto o foco está na aplicação, fora do diálogo.
 
 O rótulo usa `public/textures/pack-label.png`, configurado em `packConfig.labelTexture`. Substitua esse arquivo por um PNG RGBA vertical de aproximadamente 1024 × 1505 px. As áreas transparentes deixam aparecer o material metálico original, e a arte fica limitada à área do antigo rótulo branco.
 

@@ -8,25 +8,40 @@ export interface BoosterMotion {
   hoverX: number;
   hoverY: number;
   breath: number;
+  shake: number;
 }
 
 export function createBoosterMotion(): BoosterMotion {
-  return { tear: 0, tension: 0, peel: 0, drop: 0, emerge: 0, settle: 0, hoverX: 0, hoverY: 0, breath: 0 };
+  return { tear: 0, tension: 0, peel: 0, drop: 0, emerge: 0, settle: 0, hoverX: 0, hoverY: 0, breath: 0, shake: 0 };
 }
 
 export function packPointerTilt(clientX: number, clientY: number, width: number, height: number) {
   const normalizedX = Math.max(-1, Math.min(1, (clientX / Math.max(width, 1) - 0.5) * 2));
   const normalizedY = Math.max(-1, Math.min(1, (clientY / Math.max(height, 1) - 0.5) * 2));
-  return { x: normalizedY * 0.06, y: -normalizedX * 0.2 };
+  return { x: normalizedY * Math.PI * 8 / 180, y: -normalizedX * Math.PI * 16 / 180 };
 }
 
 export function packPose(motion: BoosterMotion) {
   return {
-    rotationX: motion.hoverX,
-    rotationY: motion.hoverY - motion.tension * 0.035,
-    rotationZ: -motion.tension * 0.025,
-    y: -motion.emerge * 0.35 + motion.breath * 0.045,
+    rotationX: motion.hoverX + motion.shake * 0.025,
+    rotationY: motion.hoverY - motion.tension * 0.035 + motion.shake * 0.018,
+    rotationZ: -motion.tension * 0.025 + motion.shake * 0.055,
+    x: motion.shake * 0.055,
+    y: -motion.emerge * 0.35 + motion.breath * 0.045 + Math.abs(motion.shake) * 0.025,
     scale: 1 + motion.breath * 0.008,
+  };
+}
+
+/** Mancha luminosa ancorada abaixo do pacote; apaga junto com seu descarte. */
+export function packGroundLight(motion: BoosterMotion, reducedMotion = false) {
+  const drop = Math.min(1, Math.max(0, motion.drop));
+  const fade = 1 - drop * drop * (3 - 2 * drop);
+  const breath = reducedMotion ? 0 : motion.breath;
+  const shake = reducedMotion ? 0 : motion.shake;
+  return {
+    strength: fade * (0.65 - breath * 0.06 + Math.abs(shake) * 0.025),
+    widthScale: 1 - breath * 0.06,
+    x: reducedMotion ? 0 : shake * 0.011 - motion.hoverY * 0.12,
   };
 }
 

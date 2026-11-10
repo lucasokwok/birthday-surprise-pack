@@ -60,6 +60,8 @@ Consultar as referências externas como estudo de técnica. OpenPack tem rasgo r
 - `src/App.tsx`: alternância entre experiência e coleção e reinício por chave de sessão.
 - `src/components/PackExperience.tsx`: fase da experiência, índice ativo, IDs revelados, gesto e timelines.
 - `src/components/BoosterScene.tsx`: carregamento/cache do GLB, renderização, materiais, iluminação, faixa e cartas 3D.
+- `src/components/PackGroundLight.tsx`: luz elíptica aditiva abaixo do pacote, derivada do movimento e apagada no descarte.
+- O repouso do pacote combina flutuação e tremidas de 0,4 s a cada 2 s; tempos em `packConfig.idle`. Inclinação por mouse/toque usa a região do pacote, separada da faixa de rasgo. Preservar pausa durante interação, aba oculta e movimento reduzido, sem disputar canais de transformação.
 - `src/three/boosterGeometry.ts`: normalização e corte dos triângulos com preservação dos atributos.
 - `src/three/boosterMotion.ts`: estado numérico e poses da animação, compartilhados com testes.
 - `src/components/GiftCard.tsx`: frame reutilizado da biblioteca, frente personalizada, verso e fallback de imagem.

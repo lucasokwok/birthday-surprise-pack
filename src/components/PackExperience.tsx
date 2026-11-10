@@ -46,7 +46,9 @@ export function PackExperience({ gifts, onComplete }: {
   const reducedRef = useRef(reduced);
   reducedRef.current = reduced;
   const movePack = useRef<{ x: (value: number) => void; y: (value: number) => void; stop: () => void } | null>(null);
-  const breathing = useRef<{ play: () => void; stop: () => void } | null>(null);
+  const idleMotion = useRef<{ play: () => void; stop: (immediate?: boolean) => void } | null>(null);
+  const packTouchRegion = useRef<HTMLDivElement>(null);
+  const packTouch = useRef<{ id: number; target: HTMLDivElement } | null>(null);
   const moveTilt = useRef<{ x: (value: number) => void; y: (value: number) => void } | null>(null);
   const tiltBox = useRef<DOMRect | null>(null);
 
@@ -58,6 +60,12 @@ export function PackExperience({ gifts, onComplete }: {
   const releasePointer = useCallback(() => {
     const current = gesture.current;
     gesture.current = null; // lostpointercapture must not cancel a committed gesture.
+    if (current?.target.hasPointerCapture(current.id)) current.target.releasePointerCapture(current.id);
+  }, []);
+
+  const releasePackTouch = useCallback(() => {
+    const current = packTouch.current;
+    packTouch.current = null;
     if (current?.target.hasPointerCapture(current.id)) current.target.releasePointerCapture(current.id);
   }, []);
 
@@ -73,8 +81,8 @@ export function PackExperience({ gifts, onComplete }: {
       });
       tear.current = gsap.timeline({ paused: true, defaults: { duration: 1, ease: "none" }, onUpdate: () => invalidate.current?.() })
         .to(motion.current, { tear: 1, tension: 0.65 }, 0);
-      const hoverX = gsap.quickTo(motion.current, "hoverX", { duration: 0.6, ease: "power2.out", onUpdate: () => invalidate.current?.() });
-      const hoverY = gsap.quickTo(motion.current, "hoverY", { duration: 0.6, ease: "power2.out", onUpdate: () => invalidate.current?.() });
+      const hoverX = gsap.quickTo(motion.current, "hoverX", { duration: packConfig.idle.tiltDuration, ease: "power2.out", onUpdate: () => invalidate.current?.() });
+      const hoverY = gsap.quickTo(motion.current, "hoverY", { duration: packConfig.idle.tiltDuration, ease: "power2.out", onUpdate: () => invalidate.current?.() });
       movePack.current = { x: hoverX, y: hoverY, stop: () => { hoverX.tween.pause(); hoverY.tween.pause(); } };
       const x = gsap.quickTo(tilt.current, "rotationX", { duration: 0.3, ease: "power2.out" });
       const y = gsap.quickTo(tilt.current, "rotationY", { duration: 0.3, ease: "power2.out" });
@@ -82,23 +90,52 @@ export function PackExperience({ gifts, onComplete }: {
     }, root);
 
     context.add(() => {
-      const loop = gsap.to(motion.current, {
+      const breath = gsap.to(motion.current, {
         breath: 1, duration: 2.4, ease: "sine.inOut", repeat: -1, yoyo: true, paused: true,
         onUpdate: () => invalidate.current?.(),
       });
+      const { shakeInterval, shakeDuration } = packConfig.idle;
+      const shake = gsap.timeline({
+        paused: true, delay: shakeInterval, repeat: -1,
+        onUpdate: () => invalidate.current?.(),
+      });
+      // Dois impulsos espelhados por ciclo, com início a cada dois segundos.
+      [1, -1].forEach((direction, cycle) => {
+        let at = cycle * shakeInterval;
+        for (const [strength, fraction] of [[1, 0.15], [-0.75, 0.2], [0.45, 0.175], [-0.2, 0.175], [0, 0.3]]) {
+          const duration = shakeDuration * fraction;
+          shake.to(motion.current, { shake: strength * direction, duration, ease: "power2.out" }, at);
+          at += duration;
+        }
+      });
+      shake.set(motion.current, { shake: 0 }, shakeInterval * 2);
       let settle: gsap.core.Tween | null = null;
-      breathing.current = {
-        play: () => { settle?.kill(); loop.restart(); },
-        stop: () => {
-          loop.pause();
+      let running = false;
+      idleMotion.current = {
+        play: () => {
+          if (running) return;
+          running = true;
           settle?.kill();
-          if (motion.current.breath === 0) return;
-          context.add(() => {
-            settle = gsap.to(motion.current, {
-              breath: 0, duration: reducedRef.current ? 0 : 0.25, ease: "power2.out",
-              onUpdate: () => invalidate.current?.(),
+          breath.invalidate().restart();
+          shake.restart(true);
+        },
+        stop: (immediate = false) => {
+          running = false;
+          breath.pause();
+          shake.pause();
+          settle?.kill();
+          if (immediate) {
+            motion.current.breath = 0;
+            motion.current.shake = 0;
+            invalidate.current?.();
+          } else if (motion.current.breath !== 0 || motion.current.shake !== 0) {
+            context.add(() => {
+              settle = gsap.to(motion.current, {
+                breath: 0, shake: 0, duration: 0.15, ease: "power2.out",
+                onUpdate: () => invalidate.current?.(),
+              });
             });
-          });
+          }
         },
       };
     });
@@ -118,7 +155,8 @@ export function PackExperience({ gifts, onComplete }: {
       open: () => {
         if (phaseRef.current !== "sealed" && phaseRef.current !== "tearing") return;
         movePack.current?.stop();
-        breathing.current?.stop();
+        idleMotion.current?.stop(reducedRef.current);
+        releasePackTouch();
         releasePointer();
         changePhase("opening");
         context.add(() => {
@@ -199,45 +237,65 @@ export function PackExperience({ gifts, onComplete }: {
     return () => {
       alive = false;
       releasePointer();
+      releasePackTouch();
       actions.current = null;
       moveTilt.current = null;
       movePack.current = null;
-      breathing.current = null;
+      idleMotion.current = null;
       returning.current?.kill();
       layer?.clear();
       context.revert();
     };
-  }, [gifts, onComplete, changePhase, releasePointer]);
+  }, [gifts, onComplete, changePhase, releasePointer, releasePackTouch]);
 
   useEffect(() => {
     const update = () => {
-      if (phase === "sealed" && modelStatus === "ready" && !reduced && !document.hidden) breathing.current?.play();
-      else breathing.current?.stop();
+      if (phaseRef.current === "sealed" && modelStatus === "ready" && !reduced && !document.hidden && !packTouch.current) {
+        idleMotion.current?.play();
+      } else idleMotion.current?.stop(reduced || document.hidden);
+      if (document.hidden) {
+        releasePackTouch();
+        movePack.current?.stop();
+        motion.current.hoverX = 0;
+        motion.current.hoverY = 0;
+        invalidate.current?.();
+      }
     };
     update();
     document.addEventListener("visibilitychange", update);
     return () => document.removeEventListener("visibilitychange", update);
-  }, [phase, modelStatus, reduced]);
+  }, [phase, modelStatus, reduced, releasePackTouch]);
 
   useEffect(() => {
     const cancel = () => {
       if (gesture.current) { releasePointer(); actions.current?.cancel(); }
+      const wasTilting = packTouch.current !== null;
+      releasePackTouch();
+      if (phaseRef.current === "sealed") {
+        movePack.current?.x(0);
+        movePack.current?.y(0);
+        if (wasTilting && !document.hidden && !reducedRef.current) idleMotion.current?.play();
+      }
     };
     window.addEventListener("resize", cancel);
     window.addEventListener("blur", cancel);
     return () => { window.removeEventListener("resize", cancel); window.removeEventListener("blur", cancel); };
-  }, [releasePointer]);
+  }, [releasePointer, releasePackTouch]);
 
   useEffect(() => {
     if (reduced) {
+      releasePackTouch();
+      idleMotion.current?.stop(true);
       moveTilt.current?.x(0);
       moveTilt.current?.y(0);
-      movePack.current?.x(0);
-      movePack.current?.y(0);
+      movePack.current?.stop();
+      motion.current.hoverX = 0;
+      motion.current.hoverY = 0;
+      invalidate.current?.();
       effectLayer.current?.clear();
       activeTimeline.current?.progress(1);
     }
-  }, [reduced]);
+  }, [reduced, releasePackTouch]);
 
   useEffect(() => {
     if (phase === "ready") cardAction.current?.focus({ preventScroll: true });
@@ -246,7 +304,8 @@ export function PackExperience({ gifts, onComplete }: {
   function startGesture(event: PointerEvent<HTMLButtonElement>) {
     if (modelStatus !== "ready" || phaseRef.current !== "sealed" || !event.isPrimary || event.button !== 0) return;
     movePack.current?.stop();
-    breathing.current?.stop();
+    idleMotion.current?.stop();
+    releasePackTouch();
     const box = event.currentTarget.getBoundingClientRect();
     gesture.current = { id: event.pointerId, start: event.clientX, distance: box.width * 0.85, progress: 0, target: event.currentTarget };
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -284,15 +343,39 @@ export function PackExperience({ gifts, onComplete }: {
     else if (phaseRef.current === "reading") actions.current?.next();
   };
 
+  function followPack(clientX: number, clientY: number) {
+    const box = packTouchRegion.current?.getBoundingClientRect();
+    if (!box) return;
+    const target = packPointerTilt(clientX - box.left, clientY - box.top, box.width, box.height);
+    movePack.current?.x(target.x);
+    movePack.current?.y(target.y);
+  }
+
+  function startPackTouch(event: PointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse" || !event.isPrimary || event.button !== 0 || packTouch.current
+      || phaseRef.current !== "sealed" || reducedRef.current || modelStatus !== "ready") return;
+    packTouch.current = { id: event.pointerId, target: event.currentTarget };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    idleMotion.current?.stop();
+    followPack(event.clientX, event.clientY);
+  }
+
+  function endPackTouch(event: PointerEvent<HTMLDivElement>) {
+    if (packTouch.current?.id !== event.pointerId) return;
+    releasePackTouch();
+    if (phaseRef.current !== "sealed") return;
+    movePack.current?.x(0);
+    movePack.current?.y(0);
+    if (!reducedRef.current && !document.hidden && modelStatus === "ready") idleMotion.current?.play();
+  }
+
   return (
     <section ref={root} className="experience" data-phase={phase} data-model-status={modelStatus} aria-label="Abertura dos presentes"
       onPointerMove={(event) => {
-        if (phase !== "sealed" || reduced || event.pointerType !== "mouse" || modelStatus !== "ready") return;
-        const target = packPointerTilt(event.clientX, event.clientY, window.innerWidth, window.innerHeight);
-        movePack.current?.x(target.x);
-        movePack.current?.y(target.y);
+        if (phaseRef.current !== "sealed" || reducedRef.current || event.pointerType !== "mouse" || modelStatus !== "ready") return;
+        followPack(event.clientX, event.clientY);
       }} onPointerLeave={() => {
-        if (phaseRef.current === "sealed") { movePack.current?.x(0); movePack.current?.y(0); }
+        if (phaseRef.current === "sealed" && !packTouch.current) { movePack.current?.x(0); movePack.current?.y(0); }
       }}>
       <div className="scene">
         {showModel ? <Suspense fallback={null}>
@@ -320,6 +403,14 @@ export function PackExperience({ gifts, onComplete }: {
             }}
             onPointerLeave={() => { moveTilt.current?.x(0); moveTilt.current?.y(0); }} />
         </div>
+        {phase === "sealed" && modelStatus === "ready" ? <div ref={packTouchRegion} className="pack-touch-target" aria-hidden="true"
+          onPointerDown={startPackTouch}
+          onPointerMove={(event) => {
+            if (phaseRef.current === "sealed" && !reducedRef.current && packTouch.current?.id === event.pointerId) {
+              followPack(event.clientX, event.clientY);
+            }
+          }}
+          onPointerUp={endPackTouch} onPointerCancel={endPackTouch} onLostPointerCapture={endPackTouch} /> : null}
         {isPack ? <button className="tear-target" type="button" disabled={modelStatus !== "ready" || phase === "returning"}
           aria-label="Arraste da esquerda para a direita para rasgar, ou pressione Enter para abrir"
           onPointerDown={startGesture} onPointerMove={dragGesture}

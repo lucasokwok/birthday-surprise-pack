@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { BufferGeometry, Euler, Float32BufferAttribute, Matrix3, Vector3, Mesh } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { prepareBooster, splitGeometry } from "../src/three/boosterGeometry.ts";
-import { cardPose, createBoosterMotion, packLight, packPointerTilt, packPose } from "../src/three/boosterMotion.ts";
+import { cardPose, createBoosterMotion, packGroundLight, packLight, packPointerTilt, packPose } from "../src/three/boosterMotion.ts";
 
 const bytes = await readFile(new URL("../models/booster_pack_tcg_pack.glb", import.meta.url));
 const gltf = await new GLTFLoader().parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), "");
@@ -168,6 +168,43 @@ test("a respiração fica limitada e mantém o rótulo frontal durante o ciclo",
   const neutral = packPose(motion);
   assert.equal(neutral.y, 0);
   assert.equal(neutral.scale, 1);
+});
+
+test("a inclinação mantém a sensibilidade proporcional em regiões móveis menores", () => {
+  const mobile = packPointerTilt(150, 75, 200, 300);
+  const desktop = packPointerTilt(300, 150, 400, 600);
+  assert.deepEqual(mobile, desktop);
+  for (const value of Object.values(packPointerTilt(0, 0, 0, 0))) assert.ok(Number.isFinite(value));
+});
+
+test("a tremida se soma à inclinação sem mudar o progresso do rasgo ou as cartas", () => {
+  const motion = { ...createBoosterMotion(), hoverX: 0.08, hoverY: -0.1, breath: 0.5, tear: 0.3 };
+  const neutral = packPose(motion);
+  const right = packPose({ ...motion, shake: 1 });
+  const left = packPose({ ...motion, shake: -1 });
+  assert.ok(right.x > 0 && left.x < 0);
+  assert.ok(right.rotationZ > neutral.rotationZ && left.rotationZ < neutral.rotationZ);
+  assert.ok(right.y > neutral.y && left.y > neutral.y);
+  assert.equal(right.scale, neutral.scale);
+  assert.deepEqual(packLight({ ...motion, shake: 1 }), packLight(motion));
+  assert.deepEqual(cardPose(0, 4, { ...motion, shake: 1 }, 100), cardPose(0, 4, motion, 100));
+  assert.deepEqual(packPose({ ...motion, shake: 0 }), neutral);
+});
+
+test("a luz inferior aparece fechada, fica estática com movimento reduzido e apaga no descarte", () => {
+  const motion = createBoosterMotion();
+  const initial = packGroundLight(motion);
+  assert.ok(initial.strength > 0);
+  assert.deepEqual(packGroundLight({ ...motion, breath: 1, shake: 1, hoverY: 0.2 }, true), initial);
+  let previous = initial.strength;
+  for (const drop of [0, 0.25, 0.5, 0.75, 1]) {
+    const light = packGroundLight({ ...motion, drop });
+    assert.ok(light.strength >= 0 && light.strength <= previous);
+    previous = light.strength;
+  }
+  assert.equal(previous, 0);
+  assert.deepEqual(packGroundLight({ ...motion, drop: -1 }), initial);
+  assert.equal(packGroundLight({ ...motion, drop: 2 }).strength, 0);
 });
 
 test("o rasgo tem brilho forte e a abertura dá lugar a uma luz residual atrás das cartas", () => {
