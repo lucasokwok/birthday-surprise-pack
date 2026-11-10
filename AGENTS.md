@@ -38,8 +38,10 @@ A última posição é a etapa de consolidação da implementação: teclado, al
 
 - Preservar React, TypeScript, Vite, CSS e GSAP existentes.
 - Verificar as APIs da versão resolvida no lockfile antes de propor substituições.
-- A cena atual usa `PackExperience` com Pointer Events e GSAP, reutilizando `Card`, `EffectLayer`, temas e movimento reduzido de `core`. `CardPack` 1.4.1 foi substituído na composição pois não expõe progresso de rasgo; não reintroduzir abertura apenas por clique como interação principal.
-- Priorizar o fluxo de animações. O visual do pacote e das cartas é provisório; refinamento gráfico fica para uma etapa posterior solicitada pelo usuário.
+- A cena atual usa `PackExperience` com Pointer Events e GSAP e `BoosterScene` com Three.js, React Three Fiber e Drei. O GLB está em `models/booster_pack_tcg_pack.glb`. Preservar seus materiais e detalhes; o arquivo não contém texturas nem animações incorporadas.
+- Manter fundo preto e nenhum HUD visível: sem cabeçalho, título, contador, instruções ou rodapé. Por solicitação posterior do usuário, manter um botão discreto com ícone de reinício no canto superior direito. Os demais controles acessíveis continuam ocultos até foco por teclado. Mensagens de erro podem aparecer para permitir recuperação.
+- A abertura corta e deforma cópias da geometria do GLB, separa a faixa e faz cartas 3D emergirem; depois reutiliza a revelação/coleção existentes com `Card` e `EffectLayer`. Não substituir o rasgo pelo desaparecimento do pacote nem reintroduzir abertura principal apenas por clique.
+- A adoção de Three.js/R3F/Drei foi solicitada expressamente pelo usuário. Não adicionar outra stack 3D, motor físico ou pós-processamento sem necessidade demonstrada. O design das cartas continua provisório.
 - Não controlar a biblioteca por seletores de DOM privado, eventos sintéticos ou alterações em `node_modules`.
 - Manter estado local. Não adicionar gerenciador global, roteador, motor físico, WebGL ou nova biblioteca de animação sem uma limitação demonstrada e justificativa concreta.
 - Evitar duas fontes de verdade para o progresso. Não executar timelines e gestos que escrevem simultaneamente a mesma transformação.
@@ -57,12 +59,16 @@ Consultar as referências externas como estudo de técnica. OpenPack tem rasgo r
 - `src/main.tsx`: entrada em `StrictMode`; estilos da biblioteca antes dos locais.
 - `src/App.tsx`: alternância entre experiência e coleção e reinício por chave de sessão.
 - `src/components/PackExperience.tsx`: fase da experiência, índice ativo, IDs revelados, gesto e timelines.
+- `src/components/BoosterScene.tsx`: carregamento/cache do GLB, renderização, materiais, iluminação, faixa e cartas 3D.
+- `src/three/boosterGeometry.ts`: normalização e corte dos triângulos com preservação dos atributos.
+- `src/three/boosterMotion.ts`: estado numérico e poses da animação, compartilhados com testes.
 - `src/components/GiftCard.tsx`: frame reutilizado da biblioteca, frente personalizada, verso e fallback de imagem.
 - `src/components/GiftCollection.tsx`: coleção e inspeção com diálogo nativo.
 - `src/data/gifts.ts`: única fonte dos presentes; `GiftDefinition[]` com SHEIN (R$ 100,00) e Pudim da Rebeca.
 - `src/data/pack.ts`: mensagem, emblema, cor e limiar do gesto da embalagem provisória.
 - `src/App.css` e `src/index.css`: estilos locais e base global.
 - `src/assets/` e `public/`: recursos estáticos.
+- `models/`: modelo original do usuário; importação `?url` do Vite resolve o arquivo no build. Créditos e licença em `THIRD_PARTY_NOTICES.md`.
 - Manter IDs únicos e estáveis. Adicionar/remover presentes deve ocorrer nos dados, sem editar a lógica principal.
 - Preferir imagens/ícones locais e campos visuais opcionais com padrões. Não colocar lógica de timeline dentro dos dados das cartas.
 - Preservar reinício completo e impedir revelações duplicadas. O progresso atual é só em memória; persistência não é um requisito.
@@ -75,12 +81,15 @@ Usar npm e preservar `package-lock.json`. Com dependências disponíveis:
 
 - `npm run dev`: desenvolvimento.
 - `npm run build`: TypeScript e produção.
+- `npm test`: testes estruturais do modelo e matemáticos de geometria/movimento, sem navegador; requer Node 22.12+.
 - `npm run lint`: Oxlint.
 - `npm run preview`: servir o build local.
 
-`npm ci` instala as versões travadas quando a tarefa permitir instalação. Não instalar dependências se a solicitação proibir. Não há script de testes configurado.
+`npm ci` instala as versões travadas quando a tarefa permitir instalação. Não instalar dependências se a solicitação proibir.
 
 Por decisão explícita do usuário, para economizar tokens, **validar somente se a aplicação builda**, executando `npm run build` após mudanças de implementação. Corrigir falhas até o comando passar. Não executar lint, testes automatizados, navegador/Playwright, screenshots, vídeos, inspeção visual, comparação quadro a quadro ou medições de desempenho, salvo nova solicitação explícita do usuário.
+
+Na integração 3D, o usuário solicitou testes e build e depois reiterou que a validação visual deve ser feita por ele. Portanto, executar os testes estruturais/matemáticos `npm test` para alterações de geometria/movimento e `npm run build`. Não executar validação visual, navegador, capturas ou benchmarks. Ao entregar alterações visuais, pedir ao usuário que as avalie no próprio dispositivo. Não declarar shaders, aparência ou fluidez certificados por testes numéricos.
 
 Essa política prevalece sobre sugestões de validação contidas nas skills e referências externas. Qualidade visual, responsividade, acessibilidade e desempenho continuam sendo requisitos a implementar, sem exigir verificação prática. Build aprovado confirma compilação e geração de artefatos; não comprova aparência, comportamento dos gestos ou desempenho. Na entrega, informar o resultado do build e que não houve validação visual/funcional.
 

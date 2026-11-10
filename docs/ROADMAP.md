@@ -2,6 +2,8 @@
 
 ## 1. Como usar este plano
 
+**Atualização 3D:** modelo fornecido integrado com malhas recortadas e deformadas, saída das cartas em Three.js e passagem à revelação existente. Tela preta sem HUD. Ver [MODEL_3D.md](MODEL_3D.md). Na presente entrega, executar `npm test` e `npm run build`; o usuário fará a validação visual. Não abrir navegador, produzir capturas ou fazer medições de aparência/fluidez.
+
 Este roadmap registra objetivos e estado da implementação de 09/11/2026. Os requisitos estão em [PROJECT_SPEC.md](PROJECT_SPEC.md) e a arquitetura atual em [ARCHITECTURE.md](ARCHITECTURE.md). Os comportamentos listados por entrega são referências de escopo; não devem ser interpretados como resultados de testes.
 
 | Entrega | Status no código |

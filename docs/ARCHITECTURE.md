@@ -2,13 +2,15 @@
 
 ## 1. Estado da implementação
 
+**Atualização 3D:** o booster é agora o GLB fornecido em `models/`, renderizado por Three.js/R3F/Drei. A tela é preta e sem HUD. A faixa é separada na geometria e deformada por shader; as cartas saem em 3D e passam ao baralho DOM existente. A análise detalhada e os limites estão em [MODEL_3D.md](MODEL_3D.md). Para esta atualização, executar testes estruturais/matemáticos e build; avaliação visual fica com o usuário, sem navegador ou capturas.
+
 Em 09/11/2026 foi implementada a sequência de rasgo, saída do baralho, revelação individual e coleção. A prioridade desta versão é animação e interação; pacote e cartas usam aparência provisória simples. O protótipo anterior da revisão `9888b6b` usava `CardPack`, cinco exemplos e uma coleção textual; essa composição foi substituída sem reescrever a stack.
 
 A validação definida pelo usuário é somente `npm run build`. Não executar lint, navegador, testes, screenshots, vídeos ou medições sem nova solicitação. Descrever recursos como implementados no código, sem alegar validação visual, funcional ou em dispositivos reais. O deploy na Vercel será feito pelo usuário.
 
 ## 2. Stack e reaproveitamento
 
-React 19/React DOM, TypeScript, Vite, GSAP e `@react-cards-opening/core`/`ui` permanecem nas versões do lockfile. Nenhuma dependência nova foi adicionada. A instalação foi feita com `npm ci`.
+React 19/React DOM, TypeScript, Vite, GSAP e `@react-cards-opening/core`/`ui` permanecem nas versões do lockfile. Na atualização 3D foram adicionados Three.js, React Three Fiber, Drei e tipos de Three.js, a pedido do usuário. A instalação foi feita com `npm ci`.
 
 | Recurso | Uso |
 | --- | --- |
@@ -28,7 +30,15 @@ React 19/React DOM, TypeScript, Vite, GSAP e `@react-cards-opening/core`/`ui` pe
 | --- | --- |
 | `src/main.tsx` | Entrada em `StrictMode`; CSS da biblioteca antes dos estilos locais |
 | `src/App.tsx` | Estado de conclusão, chave da sessão, apresentação e reinício |
-| `src/components/PackExperience.tsx` | Gesto, fases, índice ativo, IDs revelados, baralho e timelines |
+| `src/components/PackExperience.tsx` | Gesto, fases, índice ativo, IDs revelados e timelines |
+| `src/components/BoosterScene.tsx` | GLB, cache, materiais e renderização 3D |
+| `src/components/PackOpeningLight.tsx` | Brilho forte na costura do rasgo e luz residual atrás do baralho após a abertura, com movimento reduzido |
+| `src/three/boosterGeometry.ts` | Normalização e recorte de triângulos |
+| `src/three/boosterMotion.ts` | Poses numéricas compartilhadas com testes |
+| `src/three/cardGeometry.ts` | Corpo extrudado e superfície arredondada das cartas 3D, com UVs normalizadas |
+| `src/data/cardLayout.ts` | Proporção, espessura e raio de cantos compartilhados entre cartas 3D e DOM |
+| `src/data/cardPalette.ts` | Paleta rosa do rótulo aplicada ao tema, versos DOM/3D e inspeção das cartas |
+| `src/data/cardBack.ts` | Caminho compartilhado da imagem `vitoria.png` usada no verso DOM/3D |
 | `src/components/GiftCard.tsx` | Frame da biblioteca, conteúdo personalizado, flip externo, verso, ícones e fallback |
 | `src/components/GiftCollection.tsx` | Coleção e inspeção em `<dialog>` nativo |
 | `src/data/gifts.ts` | `GiftDefinition`, presentes, rótulos e raridades |
@@ -43,6 +53,8 @@ Os antigos assets de template em `src/assets/` e `public/icons.svg` permanecem s
 ## 4. Estado e fluxo
 
 `App` mantém `finished` e `session`. Reiniciar restaura `finished=false` e incrementa a chave: a cena anterior é desmontada, seus recursos são limpos e a nova começa fechada.
+
+O botão permanente com ícone de reinício no canto superior direito usa essa mesma ação. Ele substitui a área invisível de reinício no fundo da coleção e o controle global antes oculto.
 
 `PackExperience` é o único dono da revelação. Mantém fase, índice e IDs abertos. Refs espelham os valores necessários a handlers/callbacks, permitindo bloquear comandos imediatamente sem esperar outro render. Progresso contínuo do gesto não passa por `setState`.
 
@@ -66,9 +78,9 @@ A faixa usa Pointer Events, ponteiro primário e captura por `setPointerCapture`
 
 `pointercancel`, perda de captura, resize e perda de foco da janela cancelam o gesto ativo. A captura é liberada depois de limpar a referência, para impedir que `lostpointercapture` reverta uma abertura já confirmada. Um segundo ponteiro é ignorado. Clique sem arraste não abre a faixa; ativação por teclado e o botão alternativo usam a mesma sequência de abertura.
 
-O corpo e a faixa são camadas independentes, com borda irregular via CSS e linha SVG. A timeline pausada controla separação, contramovimento do pacote, brilho e indicador de progresso. A retirada do pacote e a acomodação das cartas são sequenciadas depois da confirmação. A cena usa DOM/CSS, sem motor físico, canvas próprio ou WebGL.
+O corpo e a faixa são partes derivadas do GLB original, por corte e interpolação de atributos. O gesto controla a deformação por shader. GSAP anima os valores numéricos de tensão, rasgo, remoção da faixa, saída das cartas e acomodação. R3F aplica as poses com invalidação sob demanda; não há setState por frame.
 
-A caixa do baralho, a inclinação, o voo de cada carta e a rotação frente/verso têm wrappers distintos. GSAP não escreve nas transformações internas do `Card`; controla somente elementos próprios. Isso evita disputa com os estilos da biblioteca.
+As cartas emergem no mesmo espaço 3D do pacote. Câmera e poses finais são calculadas para coincidir com o frame DOM usado na revelação. Quando a saída termina, a cena WebGL é desmontada e a revelação existente assume. Não há dois controladores concorrentes da abertura.
 
 ## 6. Ciclo de vida e efeitos
 
@@ -85,23 +97,28 @@ Movimento reduzido encurta as transições, não executa partículas e desativa 
 `GiftDefinition` estende `GlyphCard`, preservando `id`, `name`, `line`, `rarity` e `art`. Campos locais opcionais:
 
 - `icon`: `bag`, `pudding` ou `gift`, desenhados localmente em SVG.
-- `visual`: `src`, `alt` e `fit` para imagem ou ícone SVG próprios. Não precisa de um discriminante adicional: ambos usam `<img>`.
+- `visual`: `src`, `alt` e `fit` para a imagem principal. `kind: "logo"` opcional usa uma placa branca para preservar a marca; sem esse campo, a arte aparece sobre o fundo rosa.
+- `brand`: `src` e `alt` opcionais para uma segunda imagem, exibida como selo no canto da arte principal, sem deformar a logo. Se falhar, somente o selo é removido.
 - `appearance`: cor principal, cores secundárias e `classic`/`foil`.
 - `revealEffect`: `default`, `celebration` ou `glow`.
 - `info`: valor em centavos, moeda BRL e mensagem complementar.
 
 Imagem tem prioridade. Em falha, a face apresenta o glifo `art` ou o ícone local. O valor é opcional e formatado em português brasileiro; não há preço zero para presentes sem valor. A cor principal controla frame e efeitos; a primeira cor secundária participa do brilho foil. As demais cores ficam disponíveis nos dados para evolução do design.
 
-As cartas atuais são SHEIN (R$ 100,00, épica) e Pudim da Rebeca (rara, sem preço). Os nomes de raridade e todos os controles estão em português. Configurar presentes não exige editar as timelines.
+As cartas atuais são SHEIN (R$ 100,00, rara) e Pudim da Rebeca (épica, sem preço). A primeira usa `public/shein.jpg`; a segunda usa `public/pudim_pack.webp` como arte principal e `public/doceriadarebeka.jpg` como selo da doceria. Os arquivos são servidos localmente, com caminhos que respeitam o `BASE_URL` do Vite. As imagens mantêm as proporções com `contain`, e o layout se ajusta pela largura de cada carta. Os nomes de raridade e todos os controles estão em português. Configurar presentes não exige editar as timelines.
 
 ## 8. Coleção e inspeção
 
-A coleção utiliza o mesmo `GiftCard`. Sua entrada possui deslocamento e stagger simples. A inspeção usa `showModal()` do `<dialog>`, com botão de fechamento e Escape nativo. Nome e descrição completos aparecem também fora do frame, acomodando conteúdos maiores. A mensagem complementar é opcional.
+A coleção utiliza o mesmo `GiftCard`. Sua entrada possui deslocamento e stagger simples. A inspeção usa `showModal()` do `<dialog>`, com botão de fechamento e Escape nativo. O nome completo aparece também fora do frame. Por solicitação posterior do usuário, descrições e mensagens complementares não são mais renderizadas; os campos permanecem nos dados por compatibilidade. O verso DOM/3D usa `public/vitoria.png`, centralizado sem cortes, com fundo e moldura rosas; o símbolo e o texto antigos foram removidos.
+
+Na coleção e na inspeção, as cartas ficam planas e o verso local é ocultado; as transformações da entrada são limpas ao terminar. O verso interno do frame da biblioteca também fica oculto por uma classe fornecida pela API pública `classNames`, pois a virada da experiência é controlada pelo wrapper local. Isso evita manter superfícies redundantes sobrepostas nas cartas em repouso. Os dois presentes atuais usam `appearance.style: "foil"` para exibir o brilho local.
+
+O ciclo de abertura do diálogo é separado da animação de entrada, para mudanças de movimento reduzido não fecharem/reabrirem a inspeção. O handler de `close` só limpa a seleção se o diálogo realmente estiver fechado: eventos atrasados do cleanup do `StrictMode` não removem um diálogo já reaberto.
 
 O diálogo nativo fornece comportamento de modalidade/foco, mas não houve teste de acessibilidade ou compatibilidade. Esses recursos são descritos como implementação, não como certificação.
 
 ## 9. Limites e próximo trabalho
 
-O material e a direção gráfica são provisórios. A simulação é uma faixa superior controlada por progresso horizontal, não um rasgo arbitrário por trajetória ou deformação por malha. Existe sequência de saída e virada, mas nenhuma medição de fluidez em hardware real foi feita.
+O GLB não tem texturas, rig ou animações de rasgo. Materiais e detalhes de origem foram preservados; o corte e a deformação são procedurais, sem simulação física de folha. O renderizador requer WebGL e a avaliação de aparência/fluidez deve ser feita pelo usuário.
 
-O código prevê teclado, toque, cancelamentos e movimento reduzido. Apenas build é exigido e executado como validação; comportamento prático e acabamento visual não foram inspecionados. Não introduzir outra stack para refinar arte e estilos. O próximo passo é feedback do usuário sobre as animações e, depois, direção visual do pacote e das cartas. O deploy permanece a cargo do usuário.
+Os testes estruturais/matemáticos e o build não substituem essa avaliação. Não foram realizados navegador, capturas ou inspeção visual, conforme pedido. O deploy permanece a cargo do usuário.

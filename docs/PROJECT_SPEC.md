@@ -8,12 +8,14 @@ Esta especificação registra o produto desejado e a primeira implementação de
 
 **Política de validação definida pelo usuário:** para economizar tokens, validar somente a compilação com `npm run build` nas entregas de implementação. Não realizar validações visuais/funcionais, navegador, screenshots, vídeos, lint, testes automatizados ou benchmarks, salvo nova solicitação explícita. Os critérios abaixo descrevem o comportamento a implementar; não são uma obrigação de executar uma matriz de testes. Aprovação do build não comprova aparência, acessibilidade, gestos ou fluidez.
 
+**Atualização 3D:** usar o modelo `models/booster_pack_tcg_pack.glb` em tela inteira preta, sem HUD visível. O GLB tem duas malhas, dois materiais e nenhuma textura/animação incorporada; o corte procedural e as cartas emergentes estão descritos em [MODEL_3D.md](MODEL_3D.md). O usuário solicitou testes e build nesta integração, mantendo a avaliação visual a seu cargo. Não executar navegador ou capturas. Esta atualização substitui referências antigas à embalagem em CSS, instruções visíveis ou obrigação de usar apenas build.
+
 ### Situação atual resumida
 
 | Aspecto | Implementado no código | Próxima evolução |
 | --- | --- | --- |
-| Pacote | Cena própria, arraste horizontal, retorno e remoção da faixa | Design final do material e arte da embalagem |
-| Saída | Cartas sobem atrás da embalagem e acomodam em pilha | Refinamento guiado pelo feedback do usuário |
+| Pacote | GLB original com corte, deformação por gesto e faixa destacável | Avaliação visual pelo usuário |
+| Saída | Cartas Three.js emergem do pacote e passam ao baralho DOM | Refinamento guiado pelo feedback do usuário |
 | Revelação | Virada individual em perspectiva, efeitos e avanço manual | Ajuste de ritmo se solicitado |
 | Conteúdo | SHEIN e Pudim, ícones SVG e suporte a imagens locais | Fotos/ilustrações definitivas opcionais |
 | Coleção | Mesmas cartas, inspeção em diálogo e reinício | Refinamento gráfico |
@@ -58,9 +60,9 @@ Sensação de peso, elasticidade e inércia será obtida inicialmente com curvas
 
 ### 4.1 Apresentação
 
-Exibir um pacote fechado centralizado e uma instrução curta em português, por exemplo: “Arraste pela faixa superior para abrir”. Sinalizar o início e a direção do gesto sem exigir adivinhação. Flutuação, reflexo e inclinação devem ser sutis e interrompidos quando o gesto assume o controle.
+Exibir apenas o booster 3D centralizado sobre fundo preto, sem instruções, contadores, título, rodapé ou HUD. Manter instruções em português para leitores de tela. A inclinação deve ser sutil e interrompida quando o gesto assume o controle.
 
-A tela deve oferecer também uma ação discreta e visível de abertura sem arraste. Ela é uma alternativa de acesso, enquanto o arraste é a interação principal. O pacote não deve abrir acidentalmente por um toque ou clique sem deslocamento na área de rasgo.
+A tela deve oferecer também uma ação acessível de abertura sem arraste, oculta até foco por teclado. Ela é uma alternativa de acesso, enquanto o arraste é a interação principal. O pacote não deve abrir acidentalmente por um toque ou clique sem deslocamento na área de rasgo.
 
 ### 4.2 Rasgo controlado por gesto
 
@@ -123,8 +125,8 @@ Após a última revelação e sua confirmação, apresentar os presentes recebid
 
 | ID | Presente atual | Raridade | Ícone |
 | --- | --- | --- | --- |
-| `carrinho-shein` | Vale Carrinho SHEIN | `epic` | `bag` |
-| `pudim-rebeca` | Vale Caixa de Pudim da Rebeca | `rare` | `pudding` |
+| `carrinho-shein` | Vale Carrinho SHEIN | `rare` | `bag` |
+| `pudim-rebeca` | Vale Caixa de Pudim da Rebeca | `epic` | `pudding` |
 
 O protótipo inicial tinha cinco exemplos com glifos; eles foram substituídos pelos dois presentes solicitados. As artes definitivas continuam opcionais e pendentes de direção gráfica.
 
