@@ -97,7 +97,7 @@ Movimento reduzido encurta as transições, não executa partículas e desativa 
 `GiftDefinition` estende `GlyphCard`, preservando `id`, `name`, `line`, `rarity` e `art`. Campos locais opcionais:
 
 - `icon`: `bag`, `pudding` ou `gift`, desenhados localmente em SVG.
-- `visual`: `src`, `alt` e `fit` para a imagem principal. `kind: "logo"` opcional usa uma placa branca para preservar a marca; sem esse campo, a arte aparece sobre o fundo rosa.
+- `visual`: `src`, `alt` e `fit` para a imagem principal. `kind: "logo"` usa uma placa branca; `kind: "card"` exibe uma arte de carta completa, sem cortes nem textos/selos sobrepostos. O modo completo usa `contain`, mantém a proporção compartilhada DOM/3D e inclui a raridade no texto alternativo; em falha, restaura a face com nome, raridade, valor e glifo/ícone. Sem `kind`, a imagem aparece sobre o fundo rosa.
 - `brand`: `src` e `alt` opcionais para uma segunda imagem, exibida como selo no canto da arte principal, sem deformar a logo. Se falhar, somente o selo é removido.
 - `appearance`: cor principal, cores secundárias e `classic`/`foil`.
 - `revealEffect`: `default`, `celebration` ou `glow`.
@@ -105,13 +105,13 @@ Movimento reduzido encurta as transições, não executa partículas e desativa 
 
 Imagem tem prioridade. Em falha, a face apresenta o glifo `art` ou o ícone local. O valor é opcional e formatado em português brasileiro; não há preço zero para presentes sem valor. A cor principal controla frame e efeitos; a primeira cor secundária participa do brilho foil. As demais cores ficam disponíveis nos dados para evolução do design.
 
-As cartas atuais são SHEIN (R$ 100,00, rara) e Pudim da Rebeca (épica, sem preço). A primeira usa `public/shein.jpg`; a segunda usa `public/pudim_pack.webp` como arte principal e `public/doceriadarebeka.jpg` como selo da doceria. Os arquivos são servidos localmente, com caminhos que respeitam o `BASE_URL` do Vite. As imagens mantêm as proporções com `contain`, e o layout se ajusta pela largura de cada carta. Os nomes de raridade e todos os controles estão em português. Configurar presentes não exige editar as timelines.
+As quatro cartas atuais são SHEIN (R$ 100,00, rara), Caixa de Pudim da Rebeca (épica, sem preço), Café da Tarde e Chocolate com Laranja (ambas lendárias, sem preço). Usam, respectivamente, `public/cards/shein_card.png`, `caixadepudim_card.png`, `cafedatarde_card.png` e `chocolatelaranja_card.png`, todas na mesma pasta. Os caminhos respeitam o `BASE_URL` do Vite. As lendárias usam o frame animado da biblioteca, tom dourado e efeito de celebração. Os nomes de raridade e todos os controles estão em português. Configurar presentes não exige editar as timelines.
 
 ## 8. Coleção e inspeção
 
 A coleção utiliza o mesmo `GiftCard`. Sua entrada possui deslocamento e stagger simples. A inspeção usa `showModal()` do `<dialog>`, com botão de fechamento e Escape nativo. O nome completo aparece também fora do frame. Por solicitação posterior do usuário, descrições e mensagens complementares não são mais renderizadas; os campos permanecem nos dados por compatibilidade. O verso DOM/3D usa `public/vitoria.png`, centralizado sem cortes, com fundo e moldura rosas; o símbolo e o texto antigos foram removidos.
 
-Na coleção e na inspeção, as cartas ficam planas e o verso local é ocultado; as transformações da entrada são limpas ao terminar. O verso interno do frame da biblioteca também fica oculto por uma classe fornecida pela API pública `classNames`, pois a virada da experiência é controlada pelo wrapper local. Isso evita manter superfícies redundantes sobrepostas nas cartas em repouso. Os dois presentes atuais usam `appearance.style: "foil"` para exibir o brilho local.
+Na coleção e na inspeção, as cartas ficam planas e o verso local é ocultado; as transformações da entrada são limpas ao terminar. O verso interno do frame da biblioteca também fica oculto por uma classe fornecida pela API pública `classNames`, pois a virada da experiência é controlada pelo wrapper local. Isso evita manter superfícies redundantes sobrepostas nas cartas em repouso. Os quatro presentes atuais usam `appearance.style: "foil"` para exibir o brilho local.
 
 O ciclo de abertura do diálogo é separado da animação de entrada, para mudanças de movimento reduzido não fecharem/reabrirem a inspeção. O handler de `close` só limpa a seleção se o diálogo realmente estiver fechado: eventos atrasados do cleanup do `StrictMode` não removem um diálogo já reaberto.
 

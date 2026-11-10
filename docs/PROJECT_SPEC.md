@@ -127,8 +127,10 @@ Após a última revelação e sua confirmação, apresentar os presentes recebid
 | --- | --- | --- | --- |
 | `carrinho-shein` | Vale Carrinho SHEIN | `rare` | `bag` |
 | `pudim-rebeca` | Vale Caixa de Pudim da Rebeca | `epic` | `pudding` |
+| `cafe-da-tarde` | Vale Café da Tarde | `legendary` | `gift` |
+| `chocolate-laranja` | Vale Chocolate com Laranja | `legendary` | `gift` |
 
-O protótipo inicial tinha cinco exemplos com glifos; eles foram substituídos pelos dois presentes solicitados. As artes definitivas continuam opcionais e pendentes de direção gráfica.
+O protótipo inicial tinha cinco exemplos com glifos; a configuração atual tem quatro presentes garantidos, com artes completas em `public/cards/`. Os ícones servem como fallback se a imagem falhar.
 
 ### 6.2 Conteúdo inicial implementado
 
@@ -138,10 +140,10 @@ O protótipo inicial tinha cinco exemplos com glifos; eles foram substituídos p
 | Nome | Vale Carrinho SHEIN | Vale Caixa de Pudim da Rebeca |
 | Valor | R$ 100,00 | Não informado; não inventar valor |
 | Descrição | Um vale para escolher R$ 100 em produtos na SHEIN. | Um vale-presente para ganhar uma caixa de pudim da Rebeca. |
-| Arte sugerida | Sacola, roupas, acessórios ou ilustração de moda | Pudim, caixa de sobremesa, ilustração ou fotografia própria |
-| Raridade/cores provisórias | Épica / violeta | Rara / caramelo |
+| Arte aplicada | `public/cards/shein_card.png` | `public/cards/caixadepudim_card.png` |
+| Raridade/cores de efeitos | Rara / rosa | Épica / rosa claro |
 
-Não são necessárias URLs de compra nem funcionalidade de resgate. Não presumir que existam fotos ou identidade final aprovadas. As duas cartas devem ser garantidas em cada sessão.
+Não são necessárias URLs de compra nem funcionalidade de resgate. Além dessas duas cartas, Café da Tarde e Chocolate com Laranja usam as artes `cafedatarde_card.png` e `chocolatelaranja_card.png`, raridade lendária e efeitos dourados de celebração, sem valor monetário configurado. As quatro cartas são garantidas em cada sessão.
 
 ### 6.3 Contrato de personalização implementado
 
@@ -156,6 +158,7 @@ interface GiftDefinition extends GlyphCard {
     src: string;
     alt: string;
     fit?: "contain" | "cover";
+    kind?: "image" | "logo" | "card";
   };
   appearance?: {
     primaryColor?: string;

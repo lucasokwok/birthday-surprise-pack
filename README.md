@@ -15,7 +15,7 @@ Não há backend, banco, login, pagamentos, cupons válidos, resgate ou integra�
 - Cena em tela inteira preta, sem cabeçalho, contador, instruções visíveis ou rodapé.
 - Revelação individual com antecipação, virada em perspectiva e efeitos da biblioteca.
 - Avanço manual após a leitura; comandos bloqueados durante as transições.
-- Vale Carrinho SHEIN de R$ 100,00 e Vale Caixa de Pudim da Rebeca.
+- Quatro cartas com artes completas em `public/cards/`: SHEIN (rara, R$ 100,00), Caixa de Pudim da Rebeca (épica), Café da Tarde e Chocolate com Laranja (lendárias).
 - Coleção com inspeção em diálogo nativo, fechamento por Escape e reinício completo pelo botão com ícone no canto superior direito.
 - Regras responsivas e modo de movimento reduzido no código.
 
@@ -66,7 +66,7 @@ Editar [src/data/gifts.ts](src/data/gifts.ts) para adicionar/remover presentes o
 }
 ```
 
-Para imagem ou ícone próprio, usar `visual: { src: "/meu-presente.webp", alt: "Descrição da imagem", fit: "contain" }`, com arquivo em `public/`, ou importar um asset de `src/assets/`. Imagem tem preferência; em falha, aparece `art` (glifo opcional da biblioteca) ou o ícone local. Não é necessário editar a lógica da experiência. Por solicitação do usuário, descrições e mensagens complementares não são exibidas nas cartas nem na inspeção; `line` permanece nos dados por compatibilidade com o tipo da biblioteca.
+Para imagem ou ícone próprio, usar `visual: { src: "/meu-presente.webp", alt: "Descrição da imagem", fit: "contain" }`, com arquivo em `public/`, ou importar um asset de `src/assets/`. Imagem tem preferência; em falha, aparece `art` (glifo opcional da biblioteca) ou o ícone local. Para uma arte de carta completa, usar `visual: { src: import.meta.env.BASE_URL + "cards/minha_card.png", alt: "Meu presente", kind: "card" }`. Esse modo ocupa a frente sem cortes, sem sobrepor nome, raridade, valor ou selo; o texto alternativo informa a raridade. Se a imagem falhar, o layout com nome, raridade e valor é restaurado com o glifo/ícone de fallback. Não é necessário editar a lógica da experiência. Por solicitação do usuário, descrições e mensagens complementares não são exibidas nas cartas nem na inspeção; `line` permanece nos dados por compatibilidade com o tipo da biblioteca.
 
 `info.amountInCents` é opcional; `10000` exibe R$ 100,00. Sem valor configurado não aparece preço. A ordem do array é a ordem de revelação. Todos os presentes são garantidos; raridade afeta somente a apresentação. Uma lista vazia exibe uma mensagem estática.
 

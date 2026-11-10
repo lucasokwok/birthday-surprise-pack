@@ -40,6 +40,15 @@ export function GiftCardFace({ gift }: { gift: GiftDefinition }) {
   const tone = gift.appearance?.primaryColor ?? CARD_PALETTE.pink;
   const hasVisual = !!gift.visual && !imageFailed;
   const hasBrand = !!gift.brand && !brandFailed;
+  if (gift.visual?.kind === "card" && hasVisual) {
+    return (
+      <div className="gift-face gift-face--card">
+        <img className="gift-card-art" src={gift.visual.src}
+          alt={`${gift.visual.alt}. Raridade: ${rarityLabel(gift.rarity)}.`}
+          draggable={false} decoding="async" onError={() => setImageFailed(true)} />
+      </div>
+    );
+  }
   return (
     <div className="gift-face" data-visual={hasVisual || undefined}>
       <span className="gift-rarity">{rarityLabel(gift.rarity)}</span>
@@ -76,7 +85,7 @@ export function GiftCard({ gift, faceDown = false, flipRef }: {
       <div className="gift-flip" ref={flipRef}>
         <div className="gift-front">
           <Card card={gift} rarities={giftRarities} theme={cardTheme} tone={tone} width="100%" ratio={CARD_LAYOUT.ratio}
-            classNames={{ back: "gift-frame-back" }} style={{ perspective: "none",
+            classNames={{ back: "gift-frame-back", face: gift.visual?.kind === "card" ? "gift-frame-art" : undefined }} style={{ perspective: "none",
               "--rco-radius": `calc(100cqw * ${CARD_LAYOUT.cornerRatio})` } as CSSProperties}>
             <GiftCardFace gift={gift} />
           </Card>

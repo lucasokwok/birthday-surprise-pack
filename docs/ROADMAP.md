@@ -11,8 +11,8 @@ Este roadmap registra objetivos e estado da implementação de 09/11/2026. Os re
 | 1A/1B: gesto e faixa | Implementados em `PackExperience` |
 | 2A/2B: saída e baralho | Implementados com camadas e timelines GSAP |
 | 3A/3B: revelação e efeitos | Implementados; avanço manual e efeitos da biblioteca |
-| 4A: dados | SHEIN e Pudim cadastrados, contrato configurável |
-| 4B: design das cartas | Frame e ícones provisórios, imagem/fallback e foil simples; arte final adiada |
+| 4A: dados | SHEIN (rara), Pudim (épica), Café da Tarde e Chocolate com Laranja (lendárias), contrato configurável |
+| 4B: design das cartas | Artes completas de `public/cards/` aplicadas, fallback de ícones e foil; avaliação visual pelo usuário |
 | 5A: coleção | Implementada com inspeção e reinício |
 | 6A/6B: polimento | Base simples; refinamento gráfico adiado conforme pedido |
 | 7A: build | Executar `npm run build`; demais validações dispensadas |
