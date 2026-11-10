@@ -18,7 +18,7 @@ Não há backend, banco, login, pagamentos, cupons válidos, resgate ou integra�
 - Cena em tela inteira preta, sem cabeçalho, contador, instruções visíveis ou rodapé.
 - Revelação individual com antecipação, virada em perspectiva e efeitos da biblioteca.
 - Avanço manual após a leitura; comandos bloqueados durante as transições.
-- Quatro cartas com artes completas em `public/cards/`: SHEIN (rara, R$ 100,00), Caixa de Pudim da Rebeca (épica), Café da Tarde e Chocolate com Laranja (lendárias).
+- Cinco cartas com artes completas em `public/cards/`, nesta ordem: SHEIN (rara, R$ 100,00), Perfiloplastia (lendária), Caixa de Pudim da Rebeca (épica), Café da Tarde e Chocolate com Laranja (lendárias).
 - Coleção com inspeção em diálogo nativo, fechamento por Escape e reinício completo pelo botão com ícone no canto superior direito.
 - Regras responsivas e modo de movimento reduzido no código.
 

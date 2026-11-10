@@ -38,6 +38,16 @@ export const giftCards: GiftDefinition[] = [
     info: { amountInCents: 10000, currency: "BRL", note: "Escolha seus favoritos, com carinho." },
   },
   {
+    id: "perfiloplastia",
+    name: "Vale Perfiloplastia",
+    line: "Um vale-presente de perfiloplastia.",
+    rarity: "legendary",
+    icon: "gift",
+    visual: { src: `${import.meta.env.BASE_URL}cards/perfiloplastia_card.png`, alt: "Vale Perfiloplastia", kind: "card" },
+    appearance: { primaryColor: "#f5c56b", secondaryColors: [CARD_PALETTE.blush], style: "foil" },
+    revealEffect: "celebration",
+  },
+  {
     id: "pudim-rebeca",
     name: "Vale Caixa de Pudim da Rebeca",
     line: "Um vale-presente para ganhar uma caixa de pudim da Rebeca.",

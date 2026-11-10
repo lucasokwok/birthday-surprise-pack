@@ -17,7 +17,7 @@ Esta especificação registra o produto desejado e a primeira implementação de
 | Pacote | GLB original com corte, deformação por gesto e faixa destacável | Avaliação visual pelo usuário |
 | Saída | Cartas Three.js emergem do pacote e passam ao baralho DOM | Refinamento guiado pelo feedback do usuário |
 | Revelação | Virada individual em perspectiva, efeitos e avanço manual | Ajuste de ritmo se solicitado |
-| Conteúdo | SHEIN e Pudim, ícones SVG e suporte a imagens locais | Fotos/ilustrações definitivas opcionais |
+| Conteúdo | Cinco presentes com artes completas locais, incluindo Perfiloplastia como segunda carta | Personalização de artes e presentes |
 | Coleção | Mesmas cartas, inspeção em diálogo e reinício | Refinamento gráfico |
 | Acessibilidade | Alternativa sem arraste, teclado, foco e movimento reduzido no código | Nenhuma validação prática exigida |
 
@@ -126,11 +126,12 @@ Após a última revelação e sua confirmação, apresentar os presentes recebid
 | ID | Presente atual | Raridade | Ícone |
 | --- | --- | --- | --- |
 | `carrinho-shein` | Vale Carrinho SHEIN | `rare` | `bag` |
+| `perfiloplastia` | Vale Perfiloplastia | `legendary` | `gift` |
 | `pudim-rebeca` | Vale Caixa de Pudim da Rebeca | `epic` | `pudding` |
 | `cafe-da-tarde` | Vale Café da Tarde | `legendary` | `gift` |
 | `chocolate-laranja` | Vale Chocolate com Laranja | `legendary` | `gift` |
 
-O protótipo inicial tinha cinco exemplos com glifos; a configuração atual tem quatro presentes garantidos, com artes completas em `public/cards/`. Os ícones servem como fallback se a imagem falhar.
+O protótipo inicial tinha cinco exemplos com glifos; a configuração atual tem cinco presentes personalizados garantidos, com artes completas em `public/cards/`. A tabela segue a ordem de revelação: Perfiloplastia é a segunda carta. Os ícones servem como fallback se a imagem falhar.
 
 ### 6.2 Conteúdo inicial implementado
 
@@ -143,7 +144,7 @@ O protótipo inicial tinha cinco exemplos com glifos; a configuração atual tem
 | Arte aplicada | `public/cards/shein_card.png` | `public/cards/caixadepudim_card.png` |
 | Raridade/cores de efeitos | Rara / rosa | Épica / rosa claro |
 
-Não são necessárias URLs de compra nem funcionalidade de resgate. Além dessas duas cartas, Café da Tarde e Chocolate com Laranja usam as artes `cafedatarde_card.png` e `chocolatelaranja_card.png`, raridade lendária e efeitos dourados de celebração, sem valor monetário configurado. As quatro cartas são garantidas em cada sessão.
+Não são necessárias URLs de compra nem funcionalidade de resgate. Além dessas duas cartas, Perfiloplastia, Café da Tarde e Chocolate com Laranja usam as artes `perfiloplastia_card.png`, `cafedatarde_card.png` e `chocolatelaranja_card.png`, raridade lendária e efeitos dourados de celebração, sem valor monetário configurado. As cinco cartas são garantidas em cada sessão.
 
 ### 6.3 Contrato de personalização implementado
 

@@ -66,7 +66,7 @@ Consultar as referências externas como estudo de técnica. OpenPack tem rasgo r
 - `src/three/boosterMotion.ts`: estado numérico e poses da animação, compartilhados com testes.
 - `src/components/GiftCard.tsx`: frame reutilizado da biblioteca, frente personalizada, verso e fallback de imagem.
 - `src/components/GiftCollection.tsx`: coleção e inspeção com diálogo nativo.
-- `src/data/gifts.ts`: única fonte dos presentes; `GiftDefinition[]` com SHEIN (R$ 100,00, rara), Pudim da Rebeca (épica), Café da Tarde e Chocolate com Laranja (lendárias); artes completas em `public/cards/`.
+- `src/data/gifts.ts`: única fonte dos presentes; `GiftDefinition[]` com SHEIN (R$ 100,00, rara), Perfiloplastia (lendária, segunda carta), Pudim da Rebeca (épica), Café da Tarde e Chocolate com Laranja (lendárias); artes completas em `public/cards/`.
 - `src/data/pack.ts`: mensagem, emblema, cor e limiar do gesto da embalagem provisória.
 - `src/App.css` e `src/index.css`: estilos locais e base global.
 - `src/assets/` e `public/`: recursos estáticos.
